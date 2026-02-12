@@ -14,7 +14,13 @@ class SanctumApp(ctk.CTk):
 
         # 1. Window Config
         self.title("Sanctum")
-        self.geometry("900x700") 
+        self.geometry("900x700")
+        
+        # Set Window Icon
+        try:
+            self.iconbitmap("assets/icon.ico")
+        except:
+            pass # Fallback if missing
         
         # Grid Layout: 2 Columns (Sidebar | Main Content)
         self.grid_columnconfigure(1, weight=1)

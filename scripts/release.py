@@ -63,7 +63,8 @@ def main():
     print("\nBuilding Executable...")
     # --noconsole hides terminal, --onefile bundles everything
     # --add-data assets;assets includes the assets folder
-    cmd = f'pyinstaller --noconsole --onefile --name Sanctum --add-data "assets;assets" main.py'
+    # --icon assets/icon.ico sets the exe icon
+    cmd = f'pyinstaller --noconsole --onefile --name Sanctum --icon "assets/icon.ico" --add-data "assets;assets" main.py'
     run_command(cmd)
 
     # 4. Check Build
