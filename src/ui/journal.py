@@ -67,27 +67,47 @@ class JournalView(ctk.CTkFrame):
             self.textbox.configure(text_color="gray")
 
     def save_confession(self):
+        print("Save button clicked.")
         text = self.textbox.get("0.0", "end-1c")
+        print(f"Text content: '{text}'")
+        
         if not text or text == self.placeholder_text:
+            print("Save aborted: Empty text or placeholder.")
             return
 
-        confession = Confession(
-            id=str(int(datetime.now().timestamp())),
-            text=text,
-            timestamp=datetime.now().strftime("%Y-%m-%d %H:%M")
-        )
+        try:
+            print("Creating confession object...")
+            confession = Confession(
+                id=str(int(datetime.now().timestamp())),
+                text=text,
+                timestamp=datetime.now().strftime("%Y-%m-%d %H:%M")
+            )
+            print(f"Confession created: {confession}")
 
-        self.save_to_file(confession)
-        
-        # Clear and reset
-        self.textbox.delete("0.0", "end")
-        self.on_focus_out(None)
-        
-        # Refresh History
-        self.load_history()
+            self.save_to_file(confession)
+            print("Save to file successful.")
+            
+            # Clear and reset
+            self.textbox.delete("0.0", "end")
+            self.on_focus_out(None)
+            
+            # Refresh History
+            self.load_history()
+            
+            # Show visible feedback (optional, but good for user)
+            self.label.configure(text="Reflections (Saved!)", text_color="green")
+            self.after(2000, lambda: self.label.configure(text="Reflections", text_color="#1A237E"))
+            
+        except Exception as e:
+            print(f"Error saving confession: {e}")
+            self.label.configure(text=f"Error: {e}", text_color="red")
 
     def save_to_file(self, confession):
         data = []
+        
+        # Ensure dir exists
+        os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+        
         if os.path.exists(DATA_FILE):
             with open(DATA_FILE, "r") as f:
                 try:
