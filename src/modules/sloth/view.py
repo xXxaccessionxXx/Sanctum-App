@@ -10,6 +10,10 @@ class SlothView(ctk.CTkFrame):
         self.work_time = 25 * 60 # 25 Minutes
         self.is_working = False
 
+        # Log Usage
+        from src.core.stats_service import StatsService
+        StatsService().log_module_entry("sloth")
+
         # --- Header ---
         self.header = ctk.CTkFrame(self, fg_color="transparent")
         self.header.pack(fill="x", padx=20, pady=20)

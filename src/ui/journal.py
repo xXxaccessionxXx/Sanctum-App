@@ -10,6 +10,10 @@ class JournalView(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="white", **kwargs)
         
+        # Log Usage
+        from src.core.stats_service import StatsService
+        StatsService().log_module_entry("journal")
+        
         # Grid Layout: 2 Columns (Write | History)
         self.grid_columnconfigure(0, weight=3) # Writing area
         self.grid_columnconfigure(1, weight=1) # History sidebar

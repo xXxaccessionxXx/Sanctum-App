@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import time
 import threading
+from src.core.stats_service import StatsService
 
 class GluttonyView(ctk.CTkFrame):
     def __init__(self, master, module, on_back=None, **kwargs):
@@ -9,6 +10,9 @@ class GluttonyView(ctk.CTkFrame):
         self.on_back = on_back
         self.wait_time = 60 # 60 Seconds
         self.is_feasting = False
+
+        # Log Usage
+        StatsService().log_module_entry("gluttony")
 
         # --- Header ---
         self.header = ctk.CTkFrame(self, fg_color="transparent")

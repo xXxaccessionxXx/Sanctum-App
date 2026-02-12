@@ -1,10 +1,17 @@
 import customtkinter as ctk
+from src.core.stats_service import StatsService
 
 class GreedView(ctk.CTkFrame):
     def __init__(self, master, module, on_back=None, **kwargs):
         super().__init__(master, fg_color="#E8F5E9", **kwargs) # Light Green
         self.module = module
         self.on_back = on_back
+        # self.logic = LedgerLogic() # Removed
+        
+        # Log Usage
+        from src.core.stats_service import StatsService
+        StatsService().log_module_entry("greed")
+        
         self.entry_count = 0
         self.required_entries = 3
 

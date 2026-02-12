@@ -1,10 +1,14 @@
 import customtkinter as ctk
+from src.core.stats_service import StatsService
 
 class PrideView(ctk.CTkFrame):
     def __init__(self, master, module, on_back=None, **kwargs):
         super().__init__(master, fg_color="#F3E5F5", **kwargs) # Light Purple
         self.module = module
         self.on_back = on_back
+
+        # Log Usage
+        StatsService().log_module_entry("pride")
 
         # --- Header ---
         self.header = ctk.CTkFrame(self, fg_color="transparent")

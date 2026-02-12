@@ -4,9 +4,16 @@ import time
 
 class LustView(ctk.CTkFrame):
     def __init__(self, master, module, on_back=None, **kwargs):
-        super().__init__(master, fg_color="#FAFAFA", **kwargs)
+        super().__init__(master, **kwargs)
         self.module = module
         self.on_back = on_back
+        # self.logic = PanicButtonLogic() # Removed
+
+        # Log Usage
+        from src.core.stats_service import StatsService
+        StatsService().log_module_entry("lust")
+        
+        # UI Elements
 
         # --- Header ---
         self.header = ctk.CTkFrame(self, fg_color="transparent")

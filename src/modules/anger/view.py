@@ -10,6 +10,10 @@ class AngerView(ctk.CTkFrame):
         self.cooldown_seconds = 120 # 2 Minutes
         self.is_cooling = False
 
+        # Log Usage
+        from src.core.stats_service import StatsService
+        StatsService().log_module_entry("anger")
+
         # --- Header ---
         self.header = ctk.CTkFrame(self, fg_color="transparent")
         self.header.pack(fill="x", padx=20, pady=20)

@@ -37,12 +37,14 @@ class SanctumApp(ctk.CTk):
         self.btn_dashboard = self.create_nav_button("Dashboard", "🏠", 1, self.show_dashboard)
         self.btn_journal = self.create_nav_button("Journal", "📖", 2, self.show_journal)
         self.btn_community = self.create_nav_button("Community", "🔥", 3, self.show_community)
-        self.btn_settings = self.create_nav_button("Settings", "⚙️", 4, self.show_settings)
+        self.btn_challenges = self.create_nav_button("Challenges", "⚔️", 4, self.show_challenges)
+        self.btn_settings = self.create_nav_button("Settings", "⚙️", 5, self.show_settings)
 
         # 3. Initialize Views (The Rooms)
         self.dashboard_view = Dashboard(self)
         self.journal_view = JournalView(self)
         self.community_view = None # Lazy load
+        self.challenge_view = None # Lazy load
         self.settings_view = SettingsView(self)
 
         # Show default view
@@ -77,6 +79,15 @@ class SanctumApp(ctk.CTk):
             self.community_view = CommunityView(self)
         self.select_view(self.community_view)
 
+    def show_challenges(self):
+        if not self.challenge_view:
+            from src.ui.challenge_view import ChallengeView
+            self.challenge_view = ChallengeView(self)
+        else:
+            # Refresh if already exists
+            self.challenge_view.refresh_ui()
+        self.select_view(self.challenge_view)
+
     def show_settings(self):
         self.select_view(self.settings_view)
 
@@ -86,6 +97,7 @@ class SanctumApp(ctk.CTk):
         self.journal_view.grid_forget()
         self.settings_view.grid_forget()
         if self.community_view: self.community_view.grid_forget()
+        if self.challenge_view: self.challenge_view.grid_forget()
         
         # Show the selected one
         view.grid(row=0, column=1, sticky="nsew")

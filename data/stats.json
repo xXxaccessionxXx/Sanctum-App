@@ -1,0 +1,26 @@
+{
+    "challenges": [
+        {
+            "id": "daily_prayer",
+            "title": "Daily Offering",
+            "desc": "Pray 'The Hidden Intercessor' for someone you dislike.",
+            "date": "2026-02-12",
+            "status": "completed",
+            "progress": 0,
+            "target": 1,
+            "completed_at": "2026-02-12 16:23:44"
+        }
+    ],
+    "journal": [
+        "2026-02-12 16:23:37"
+    ],
+    "sloth": [
+        "2026-02-12 16:26:36"
+    ],
+    "greed": [
+        "2026-02-12 16:26:40"
+    ],
+    "lust": [
+        "2026-02-12 16:27:22"
+    ]
+}
