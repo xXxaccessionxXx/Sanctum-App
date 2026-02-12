@@ -50,6 +50,11 @@ class SanctumApp(ctk.CTk):
         # Show default view
         self.show_dashboard()
 
+        # 4. Start Auto-Updater (in background)
+        from src.core.updater import UpdaterService
+        self.updater = UpdaterService(self)
+        self.updater.check_for_updates()
+
     def create_nav_button(self, text, icon, row, command):
         """Helper to create consistent sidebar buttons."""
         btn = ctk.CTkButton(
