@@ -4,7 +4,7 @@ import requests
 import threading
 import subprocess
 import time
-from src.core.version import VERSION
+import src.core.version
 
 REPO_OWNER = "xXxaccessionxXx"
 REPO_NAME = "Sanctum-App"
@@ -25,7 +25,8 @@ class UpdaterService:
                     data = response.json()
                     remote_tag = data.get("tag_name", "").strip().lstrip("v")
                     
-                    if self.is_newer(remote_tag, VERSION):
+                    local_version = src.core.version.VERSION
+                    if self.is_newer(remote_tag, local_version):
                         self.new_version = remote_tag
                         # Find the .exe asset
                         for asset in data.get("assets", []):
