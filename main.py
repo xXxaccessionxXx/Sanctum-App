@@ -61,6 +61,38 @@ class SanctumApp(ctk.CTk):
         self.updater = UpdaterService(self)
         self.updater.check_for_updates()
 
+        # 5. Start Background Services (Activity, Notifications, Tray)
+        from src.core.activity_monitor import ActivityMonitor
+        from src.core.notification_service import NotificationService
+        from src.core.tray_service import TrayService
+        
+        self.monitor = ActivityMonitor(interval=10)
+        self.notifier = NotificationService(interval_minutes=60)
+        self.tray = TrayService(self)
+        
+        self.monitor.start()
+        self.notifier.start()
+        self.tray.start()
+        
+        # Override Close Behavior
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def show_window(self):
+        """Called by Tray to restore window."""
+        self.deiconify()
+        self.lift()
+
+    def on_close(self):
+        """Minimize to tray instead of closing."""
+        self.withdraw()
+
+    def quit_app(self):
+        """Actually shutdown."""
+        if hasattr(self, 'monitor'): self.monitor.stop()
+        if hasattr(self, 'notifier'): self.notifier.stop()
+        if hasattr(self, 'tray'): self.tray.stop()
+        self.destroy()
+
     def create_nav_button(self, text, icon, row, command):
         """Helper to create consistent sidebar buttons."""
         btn = ctk.CTkButton(

@@ -20,13 +20,32 @@ class PrideModule(SpiritualModule):
 
     def get_daily_manna(self) -> Scripture:
         from src.core.scripture_service import ScriptureService
-        return ScriptureService.get_verse("humility")
+        return ScriptureService.get_smart_verse("humility")
+
+    def get_activities(self) -> list[Activity]:
+        return [
+            Activity(
+                id="pride_litany",
+                title="The Litany of Humility",
+                description="Read the prayer of surrender.",
+                duration_minutes=2,
+                type="Prayer"
+            ),
+             Activity(
+                id="pride_service",
+                title="Service of Humility",
+                description="Do a hidden chore or act of service. Tell no one.",
+                duration_minutes=10,
+                type="Service"
+            ),
+             Activity(
+                id="pride_silence",
+                title="The Validation Fast",
+                description="Commit to staying silent when you want credit.",
+                duration_minutes=1,
+                type="Intention"
+            )
+        ]
 
     def get_escape_route(self) -> Activity:
-        return Activity(
-            id="pride_reset",
-            title="The Litany of Humility",
-            description="Read the prayer of surrender.",
-            duration_minutes=2,
-            type="Prayer"
-        )
+        return self.get_activities()[0]

@@ -26,6 +26,16 @@ class StatsService:
         # Also track challenge history: {"challenges": [{"id": ..., "date": ..., "status": ...}]}
         if "challenges" not in self.stats:
             self.stats["challenges"] = []
+            
+        if "monitoring_enabled" not in self.stats:
+            self.stats["monitoring_enabled"] = False
+
+    def set_monitoring(self, enabled: bool):
+        self.stats["monitoring_enabled"] = enabled
+        self._save_stats()
+
+    def is_monitoring_enabled(self) -> bool:
+        return self.stats.get("monitoring_enabled", False)
 
     def log_module_entry(self, module_name):
         """Logs that a user entered a specific module."""
@@ -71,6 +81,29 @@ class StatsService:
             return delta.days
         except:
             return -1
+
+    def log_activity(self, app_title, duration_seconds):
+        """Logs user activity (app title and duration)."""
+        if "activity_log" not in self.stats:
+            self.stats["activity_log"] = {} # {date_hour: {app_name: total_seconds}}
+            
+        # Key by Date+Hour to allow pruning/analysis
+        key = datetime.now().strftime("%Y-%m-%d %H")
+        
+        if key not in self.stats["activity_log"]:
+            self.stats["activity_log"][key] = {}
+            
+        current = self.stats["activity_log"][key].get(app_title, 0)
+        self.stats["activity_log"][key][app_title] = current + duration_seconds
+        
+        # Optimize save: only save every X updates or implicitly? 
+        # For now, save every time (might be IO heavy, but safe)
+        self._save_stats()
+
+    def get_recent_activity(self, hours=1):
+        """Returns aggregated activity for the last X hours."""
+        # Simple implementation for now
+        pass
 
     def _save_stats(self):
         os.makedirs(os.path.dirname(STATS_FILE), exist_ok=True)

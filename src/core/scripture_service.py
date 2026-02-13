@@ -43,6 +43,20 @@ class ScriptureService:
             Scripture("Man shall not live by bread alone, but by every word that comes from the mouth of God.", "Matthew 4:4"),
             Scripture("Do not join those who drink too much wine or gorge themselves on meat, for drunkards and gluttons become poor.", "Proverbs 23:20-21"),
         ],
+        "morning": [
+            Scripture("This is the day that the Lord has made; let us rejoice and be glad in it.", "Psalm 118:24"),
+            Scripture("Satisfy us in the morning with your steadfast love, that we may rejoice and be glad all our days.", "Psalm 90:14"),
+             Scripture("Let me hear in the morning of your steadfast love, for in you I trust.", "Psalm 143:8"),
+        ],
+        "evening": [
+            Scripture("In peace I will both lie down and sleep; for you alone, O Lord, make me dwell in safety.", "Psalm 4:8"),
+            Scripture("The Lord is my light and my salvation; whom shall I fear?", "Psalm 27:1"),
+             Scripture("I remember you upon my bed, and meditate on you in the watches of the night.", "Psalm 63:6"),
+        ],
+        "midday": [
+             Scripture("The Lord is my shepherd; I shall not want.", "Psalm 23:1"),
+             Scripture("Cast your burden on the Lord, and he will sustain you.", "Psalm 55:22"),
+        ],
          "general": [
             Scripture("For God so loved the world, that he gave his only Son.", "John 3:16"),
             Scripture("Trust in the Lord with all your heart.", "Proverbs 3:5"),
@@ -87,4 +101,40 @@ class ScriptureService:
             print(f"API Error for {selected_scripture.reference}: {e}")
 
         return selected_scripture
+
+    @staticmethod
+    def get_smart_verse(base_tag: str = "general") -> Scripture:
+        """
+        Intelligently selects a verse based on time of day and context.
+        If base_tag is specific (not 'general'), it prioritizes that tag but may occasionaly inject a time-based verse.
+        """
+        import datetime
+        
+        current_hour = datetime.datetime.now().hour
+        time_tag = "general"
+        
+        if 5 <= current_hour < 12:
+            time_tag = "morning"
+        elif 12 <= current_hour < 18:
+            time_tag = "midday"
+        elif 18 <= current_hour <= 23 or 0 <= current_hour < 5:
+            time_tag = "evening"
+            
+        # Decision Logic:
+        # 1. If base_tag is specific (e.g. "temperance"), use it 70% of the time, time-based 30%
+        # 2. If base_tag is "general", use time-based 80% of the time.
+        
+        should_use_time = False
+        if base_tag == "general":
+            should_use_time = random.random() < 0.8
+        else:
+            should_use_time = random.random() < 0.3
+            
+        final_tag = time_tag if should_use_time else base_tag
+        
+        # If we selected a time tag that doesn't exist (safety), fall back to base
+        if final_tag not in ScriptureService.FALLBACK_VERSES:
+            final_tag = base_tag
+            
+        return ScriptureService.get_verse(final_tag)
 

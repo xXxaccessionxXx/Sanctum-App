@@ -9,18 +9,95 @@
             "progress": 0,
             "target": 1,
             "completed_at": "2026-02-12 16:23:44"
+        },
+        {
+            "id": "daily_prayer",
+            "title": "Daily Offering",
+            "desc": "Pray 'The Hidden Intercessor' for someone you dislike.",
+            "date": "2026-02-13",
+            "status": "active",
+            "progress": 0,
+            "target": 1
+        },
+        {
+            "id": "permission_grant",
+            "title": "Deepen the Mirror",
+            "desc": "Allow Grace of God to see your activity for better guidance?",
+            "date": "2026-02-13",
+            "status": "completed",
+            "type": "system",
+            "completed_at": "2026-02-13 14:35:47"
+        },
+        {
+            "id": "nature_walk",
+            "title": "Creation Walk",
+            "desc": "Walk outside 5 mins without phone.",
+            "date": "2026-02-13",
+            "status": "active",
+            "progress": 0,
+            "target": 1
+        },
+        {
+            "id": "daily_offering",
+            "title": "Daily Offering",
+            "desc": "Pray for someone you dislike.",
+            "date": "2026-02-13",
+            "status": "active",
+            "progress": 0,
+            "target": 1
+        },
+        {
+            "id": "silence_hour",
+            "title": "Hour of Silence",
+            "desc": "No music or media for 1 hour.",
+            "date": "2026-02-13",
+            "status": "active",
+            "progress": 0,
+            "target": 1
         }
     ],
     "journal": [
-        "2026-02-12 16:23:37"
+        "2026-02-12 16:23:37",
+        "2026-02-13 14:08:00",
+        "2026-02-13 14:15:31",
+        "2026-02-13 14:20:18",
+        "2026-02-13 14:30:12",
+        "2026-02-13 14:35:41",
+        "2026-02-13 14:40:34",
+        "2026-02-13 14:42:40",
+        "2026-02-13 14:44:30"
     ],
     "sloth": [
-        "2026-02-12 16:26:36"
+        "2026-02-12 16:26:36",
+        "2026-02-13 14:16:15",
+        "2026-02-13 14:25:33"
     ],
     "greed": [
-        "2026-02-12 16:26:40"
+        "2026-02-12 16:26:40",
+        "2026-02-13 14:25:18"
     ],
     "lust": [
-        "2026-02-12 16:27:22"
-    ]
+        "2026-02-12 16:27:22",
+        "2026-02-13 14:20:22"
+    ],
+    "anger": [
+        "2026-02-13 14:15:39"
+    ],
+    "pride": [
+        "2026-02-13 14:15:45",
+        "2026-02-13 14:23:45"
+    ],
+    "gluttony": [
+        "2026-02-13 14:15:48",
+        "2026-02-13 14:40:51"
+    ],
+    "monitoring_enabled": true,
+    "activity_log": {
+        "2026-02-13 14": {
+            "Sanctum": 30,
+            "Task Manager": 20,
+            "System tray overflow window.": 10,
+            "Grace_Of_God - Antigravity - release.py": 10
+        }
+    }
 }

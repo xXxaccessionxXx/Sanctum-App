@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from typing import List
+
 # --- 1. Data Models ---
 
 @dataclass
@@ -58,3 +60,10 @@ class SpiritualModule(ABC):
     @abstractmethod
     def get_escape_route(self) -> Activity:
         pass
+
+    def get_activities(self) -> List[Activity]:
+        """
+        Returns a list of activities available in this module.
+        Defaults to returning the single escape route for backward compatibility.
+        """
+        return [self.get_escape_route()]

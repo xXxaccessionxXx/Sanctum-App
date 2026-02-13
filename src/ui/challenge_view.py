@@ -7,59 +7,71 @@ class ChallengeView(ctk.CTkFrame):
         self.service = ChallengeService()
         
         # Title
-        ctk.CTkLabel(self, text="The Ascetic Path", font=("Times New Roman", 24, "bold"), text_color="#1A237E").pack(pady=20)
+        ctk.CTkLabel(self, text="The Ascetic Path", font=("Times New Roman", 24, "bold"), text_color="#1A237E").pack(pady=(20, 5))
         ctk.CTkLabel(self, text="Spiritual Exercises tailored to your struggle.", font=("Arial", 12), text_color="gray").pack(pady=(0, 20))
 
-        # Challenge Card Area
-        self.card_frame = ctk.CTkFrame(self, fg_color="#F3E5F5", corner_radius=15, border_width=1, border_color="#E1BEE7")
-        self.card_frame.pack(fill="x", padx=40, pady=20)
+        # Scrollable Area for Multiple Challenges
+        self.scroll_frame = ctk.CTkScrollableFrame(self, fg_color="transparent")
+        self.scroll_frame.pack(expand=True, fill="both", padx=20, pady=10)
 
         self.refresh_ui()
 
     def refresh_ui(self):
-        # Clear card
-        for widget in self.card_frame.winfo_children():
+        # Clear existing
+        for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
-        challenge = self.service.get_active_challenge()
+        challenges = self.service.get_active_challenges()
 
-        if not challenge:
-            ctk.CTkLabel(self.card_frame, text="No active challenge today.", font=("Arial", 16)).pack(pady=40)
-            ctk.CTkLabel(self.card_frame, text="Rest in Grace.", text_color="gray").pack(pady=(0, 40))
+        if not challenges:
+            ctk.CTkLabel(self.scroll_frame, text="No immediate burdens today.", font=("Arial", 16)).pack(pady=40)
+            ctk.CTkLabel(self.scroll_frame, text="Rest in Grace.", text_color="gray").pack(pady=(0, 40))
             return
 
-        # Display Challenge
+        for c in challenges:
+            self._render_challenge_card(c)
+
+    def _render_challenge_card(self, challenge):
+        card = ctk.CTkFrame(self.scroll_frame, fg_color="#F3E5F5", corner_radius=15, border_width=1, border_color="#E1BEE7")
+        card.pack(fill="x", padx=10, pady=10)
+
+        # Header
+        header = ctk.CTkFrame(card, fg_color="transparent")
+        header.pack(fill="x", padx=15, pady=(15, 5))
+        
         status = challenge.get("status", "active")
-        
-        # Header (Icon + Title)
-        header = ctk.CTkFrame(self.card_frame, fg_color="transparent")
-        header.pack(fill="x", padx=20, pady=(20, 10))
-        
         icon = "✅" if status == "completed" else "⚔️"
-        ctk.CTkLabel(header, text=icon, font=("Arial", 30)).pack(side="left")
-        ctk.CTkLabel(header, text=challenge["title"], font=("Arial", 20, "bold"), text_color="#4A148C").pack(side="left", padx=15)
+        
+        # Special Icon for System/Permission
+        if challenge.get("id") == "permission_grant":
+             icon = "🔒"
 
-        # Description
-        ctk.CTkLabel(self.card_frame, text=challenge["desc"], font=("Arial", 14), text_color="#424242", wraplength=400).pack(padx=20, pady=10)
+        ctk.CTkLabel(header, text=icon, font=("Arial", 24)).pack(side="left")
+        ctk.CTkLabel(header, text=challenge["title"], font=("Arial", 18, "bold"), text_color="#4A148C").pack(side="left", padx=10)
 
-        # Status / Action
+        # Body
+        ctk.CTkLabel(card, text=challenge["desc"], font=("Arial", 14), text_color="#424242", wraplength=350, justify="left").pack(fill="x", padx=15, pady=5)
+
+        # Action / Status
         if status == "completed":
-            ctk.CTkLabel(self.card_frame, text="Challenge Completed", font=("Arial", 16, "bold"), text_color="#2E7D32").pack(pady=(20, 10))
-            
-            # Completion Verse
-            verse_text = "\"For the LORD sees not as man sees:\nman looks on the outward appearance,\nbut the LORD looks on the heart.\""
-            ctk.CTkLabel(self.card_frame, text=verse_text, font=("Times New Roman", 16, "italic"), text_color="#4E342E").pack(pady=10)
-            ctk.CTkLabel(self.card_frame, text="- 1 Samuel 16:7", font=("Arial", 12, "bold"), text_color="#5D4037").pack(pady=(0, 20))
+            ctk.CTkLabel(card, text="Completed", font=("Arial", 12, "bold"), text_color="#2E7D32").pack(pady=(10, 15))
         else:
-            self.action_btn = ctk.CTkButton(
-                self.card_frame, 
-                text="Mark as Complete", 
-                fg_color="#AB47BC", 
-                hover_color="#8E24AA",
-                command=self.on_complete
-            )
-            self.action_btn.pack(pady=20)
+            btn_text = "Mark as Complete"
+            btn_color = "#AB47BC"
+            
+            if challenge.get("id") == "permission_grant":
+                btn_text = "Grant Permission"
+                btn_color = "#1565C0"
 
-    def on_complete(self):
-        if self.service.complete_challenge():
+            ctk.CTkButton(
+                card, 
+                text=btn_text, 
+                fg_color=btn_color,
+                hover_color="#7B1FA2",
+                height=32,
+                command=lambda cid=challenge["id"]: self.on_complete(cid)
+            ).pack(pady=(10, 15), padx=15, fill="x")
+
+    def on_complete(self, challenge_id):
+        if self.service.complete_challenge(challenge_id):
             self.refresh_ui()
